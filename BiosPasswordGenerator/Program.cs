@@ -1,4 +1,5 @@
-﻿using BiosPasswordGenerator.Vendors;
+﻿using System;
+using BiosPasswordGenerator.Vendors;
 
 namespace BiosPasswordGenerator
 {
@@ -6,15 +7,69 @@ namespace BiosPasswordGenerator
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Enter year:");
+            Console.WriteLine("Welcome to the BIOS Password Generator.");
+            Console.WriteLine("Currently supported manufacturers:");
+            Console.WriteLine("1. ASUS "); //Date-based
+            Console.WriteLine("2. Dell "); // Service Tag-based
+            Console.WriteLine("3. Phoenix "); //5-digit hash
+            Console.WriteLine("Enter the number to your BIOS manufacturer:");
+
+            string choice = Console.ReadLine();
+            string password = null;
+
+            switch (choice)
+            {
+                case "1":
+                    password = GenerateAsusPassword();
+                    break;
+                case "2":
+                    password = GenerateDellPassword(); 
+                    break;
+                case "3":
+                    password = GeneratePhoenixPassword(); 
+                    break;
+                default:
+                    Console.WriteLine("Invalid choice. Please restart and select a valid option.");
+                    return;
+            }
+
+            if (!string.IsNullOrEmpty(password))
+            {
+                Console.WriteLine($"Generated BIOS Password: {password}");
+            }
+        }
+
+        private static string GenerateAsusPassword()
+        {
+            Console.WriteLine("ASUS Password Generator (Date-based)");
+            Console.Write("Enter year: ");
             int year = int.Parse(Console.ReadLine());
-            Console.WriteLine("Enter month:");
+            Console.Write("Enter month: ");
             int month = int.Parse(Console.ReadLine());
-            Console.WriteLine("Enter day:");
+            Console.Write("Enter day: ");
             int day = int.Parse(Console.ReadLine());
 
-            string password = AsusGenerator.GeneratePassword(year, month, day);
-            Console.WriteLine($"Generated ASUS BIOS Password: {password}");
+            return AsusGenerator.GeneratePassword(year, month, day);
+        }
+
+        private static string GenerateDellPassword()
+        {
+            Console.WriteLine("Dell Password Generator (Service Tag-based)");
+            Console.Write("Enter Dell Service Tag (e.g., 1234567-595B): ");
+            string serviceTag = Console.ReadLine();
+            
+            //call to DellGenerator.GeneratePassword when implemented
+            return "Error not found";
+        }
+
+        private static string GeneratePhoenixPassword()
+        {
+            Console.WriteLine("Phoenix Password Generator (5-digit hash)");
+            Console.Write("Enter 5-digit Phoenix hash code: ");
+            string hashCode = Console.ReadLine();
+            
+            //call to PhoenixGenerator.GeneratePassword when implemented
+            return "Error not found";
         }
     }
 }
