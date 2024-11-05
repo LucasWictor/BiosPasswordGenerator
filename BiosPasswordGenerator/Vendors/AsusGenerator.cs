@@ -1,4 +1,5 @@
 using System.Text;
+using BiosPasswordGenerator.Utilities;
 
 namespace BiosPasswordGenerator.Vendors
 {
@@ -6,9 +7,14 @@ namespace BiosPasswordGenerator.Vendors
     {
         private static readonly int[] AsusTable = InitTable();
 
-        // Generate the ASUS BIOS password based on year, month, and day
         public static string GeneratePassword(int year, int month, int day)
         {
+            // DateValidator to check if the date is valid
+            if (!DateValidator.IsValidDate(year, month, day))
+            {
+                throw new ArgumentException("Invalid date inputs.");
+            }
+
             string dateString = $"{year:D4}{month:D2}{day:D2}";
             int checksum = int.Parse(dateString, System.Globalization.NumberStyles.HexNumber);
             StringBuilder password = new StringBuilder();
@@ -21,18 +27,17 @@ namespace BiosPasswordGenerator.Vendors
 
                 if (passwordChar > 9)
                 {
-                    // Convert to letters
                     password.Append((char)(passwordChar + 'A' - 10));
                 }
                 else
                 {
-                    // Convert to numbers
                     password.Append((char)(passwordChar + '0'));
                 }
             }
 
             return password.ToString();
         }
+
 
         private static int[] InitTable(int a1 = 11, int a2 = 19, int a3 = 6)
         {
