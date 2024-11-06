@@ -1,5 +1,7 @@
 ﻿using System;
+using BiosPasswordGenerator.Utilities;
 using BiosPasswordGenerator.Vendors;
+using PhoenixGenerator;
 
 namespace BiosPasswordGenerator
 {
@@ -9,10 +11,10 @@ namespace BiosPasswordGenerator
         {
             Console.WriteLine("Welcome to the BIOS Password Generator.");
             Console.WriteLine("Currently supported manufacturers:");
-            Console.WriteLine("1. ASUS "); //Date-based
+            Console.WriteLine("1. ASUS "); // Date-based
             Console.WriteLine("2. Dell "); // Service Tag-based
-            Console.WriteLine("3. Phoenix "); //5-digit hash
-            Console.WriteLine("Enter the number to your BIOS manufacturer:");
+            Console.WriteLine("3. Phoenix "); // 5-digit hash
+            Console.WriteLine("Enter the number to select your BIOS manufacturer:");
 
             string choice = Console.ReadLine();
             string password = null;
@@ -58,7 +60,7 @@ namespace BiosPasswordGenerator
             Console.Write("Enter Dell Service Tag (e.g., 1234567-595B): ");
             string serviceTag = Console.ReadLine();
             
-            //call to DellGenerator.GeneratePassword when implemented
+            // Placeholder until DellGenerator is implemented
             return "Error not found";
         }
 
@@ -67,9 +69,16 @@ namespace BiosPasswordGenerator
             Console.WriteLine("Phoenix Password Generator (5-digit hash)");
             Console.Write("Enter 5-digit Phoenix hash code: ");
             string hashCode = Console.ReadLine();
-            
-            //call to PhoenixGenerator.GeneratePassword when implemented
-            return "Error not found";
+
+            try
+            {
+                return HpPhoenixPasswordGenerator.GeneratePassword(hashCode);
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
         }
     }
 }
