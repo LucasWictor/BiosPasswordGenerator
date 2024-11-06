@@ -43,15 +43,21 @@ namespace BiosPasswordGenerator
 
         private static string GenerateAsusPassword()
         {
-            Console.WriteLine("ASUS Password Generator (Date-based)");
-            Console.Write("Enter year: ");
-            int year = int.Parse(Console.ReadLine());
-            Console.Write("Enter month: ");
-            int month = int.Parse(Console.ReadLine());
-            Console.Write("Enter day: ");
-            int day = int.Parse(Console.ReadLine());
+            var parser = new InputParser();
+            Console.WriteLine("ASUS Password Generator1");
+            Console.Write("Enter date in format YYYY-MM-DD: ");
+            string dateInput = Console.ReadLine();
 
-            return AsusGenerator.GeneratePassword(year, month, day);
+            try
+            {
+                var (year, month, day) = parser.ParseDateInput(dateInput);
+                return AsusGenerator.GeneratePassword(year, month, day);
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            } 
         }
 
         private static string GenerateDellPassword()
